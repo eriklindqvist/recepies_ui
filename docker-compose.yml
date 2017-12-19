@@ -1,0 +1,9 @@
+version: "2.0"
+services:
+  recipe_ui:
+    image: recipe_ui
+    ports:
+      - "3003:3003"
+    environment:
+      - FILEBASE=files
+      - PORT=3003
