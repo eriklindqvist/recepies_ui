@@ -4,6 +4,3 @@ services:
     image: recipe_ui
     ports:
       - "3003:3003"
-    environment:
-      - FILEBASE=files
-      - PORT=3003

@@ -1,2 +1,2 @@
 FROM varsego
-COPY files files
+COPY build files
