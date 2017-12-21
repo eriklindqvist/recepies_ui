@@ -13,6 +13,12 @@ class App extends Component {
     this.handleClick = function(e) {
       _this.setState({recipe: this.props.id});
     }
+
+    this.resetRecipe = this.resetRecipe.bind(this);
+  }
+
+  resetRecipe() {
+    this.setState({recipe: null});
   }
 
   render() {
@@ -21,7 +27,7 @@ class App extends Component {
     return (
       <div className="App">
         <header className="header">
-          <h1 className="title">Recepies</h1>
+          <h1 className="title" onClick={this.resetRecipe}>Recepies</h1>
         </header>
         {body}
       </div>
