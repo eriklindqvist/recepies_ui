@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './RecipeListItem.css';
 
 class RecipeListItem extends Component {
   render() {

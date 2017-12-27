@@ -10,6 +10,7 @@ class Recepies extends Component {
       if (response.status >= 200 && response.status < 300) {
         return response;
       } else {
+        console.log(response);
         let error = new Error(response.statusText);
         error.response = response;
         throw error;
@@ -18,7 +19,8 @@ class Recepies extends Component {
   }
 
   componentDidMount() {
-    return fetch("/api/recepies/names")
+    //return fetch("/api/recepies/names")
+    return fetch("https://recepies.local/api/recepies/names")
      .then(this.checkStatus)
      .then(response => response.json())
      .then(json => this.setState({recepies: json, loading: false}))

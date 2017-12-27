@@ -8,6 +8,10 @@
   color: white;
 }
 
+.header h1 {
+  cursor: pointer;
+}
+
 .title {
   font-size: 2em;
 }

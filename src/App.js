@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import Recepies from './Recepies.js'
+import Recipe from './Recipe.js'
 
 import './App.css';
 
@@ -22,7 +23,7 @@ class App extends Component {
   }
 
   render() {
-    var body = this.state.recipe ? <p>Recipe: {this.state.recipe}</p> : <Recepies click={this.handleClick} />
+    var body = this.state.recipe ? <Recipe id={this.state.recipe} /> : <Recepies click={this.handleClick} />
 
     return (
       <div className="App">
