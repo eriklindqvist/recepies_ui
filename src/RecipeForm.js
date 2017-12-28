@@ -48,7 +48,6 @@ class RecipeForm extends Component {
       if (response.status >= 200 && response.status < 300) {
         return response;
       } else {
-        console.log(response);
         let error = new Error(response.statusText);
         error.response = response;
         throw error;
@@ -71,27 +70,21 @@ class RecipeForm extends Component {
    handleSubmit(e) {
      e.preventDefault();
 
-     var id = this.state.recipe.id ? '/'+this.state.recipe.id : ''
-     var url = "/api/recipe"+id;
-     //var url = "https://recepies.local/api/recipe/"+id;
+     var id = !!this.state.recipe.id ? '/'+this.state.recipe.id : ''
+     //var url = "/api/recipe"+id;
+     var url = "https://recepies.local/api/recipe"+id;
      var data = JSON.stringify(this.state.recipe);
      var method = this.state.recipe.id ? 'PUT' : 'POST';
      var options = {method: method, body: data};
 
-     console.log(url);
-     console.log(options);
-     console.log(data);
-
      fetch(url, options)
       .then(this.checkStatus)
-      .then(response => response.json())
-      .then(json => this.setState({recipe: json}))
-      .then(this.props.submit.call(this))
       .catch(e => console.log(e));
+
+    this.props.submit.call(this);
    }
 
   render() {
-    console.log(this.state.recipe);
     var ingredients = this.state.recipe.ingredients.map((ingredient, index) => {
       return <IngredientForm
         key={index}

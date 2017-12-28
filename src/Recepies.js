@@ -6,11 +6,19 @@ class Recepies extends Component {
     super(props);
     this.state = { recepies: [], loading: true };
 
+    var _this = this;
+
+    this.deleteRecipe = function() {
+      console.log("deleted: " + this.props.id + " with index " + this.props.index);
+      var recepies = _this.state.recepies;
+      recepies.splice(this.props.index, 1);
+      _this.setState({recepies: recepies});
+    }
+
     this.checkStatus = (response) => {
       if (response.status >= 200 && response.status < 300) {
         return response;
       } else {
-        console.log(response);
         let error = new Error(response.statusText);
         error.response = response;
         throw error;
@@ -19,8 +27,8 @@ class Recepies extends Component {
   }
 
   componentDidMount() {
-    return fetch("/api/recepies/names")
-    //return fetch("https://recepies.local/api/recepies/names")
+    //return fetch("/api/recepies/names")
+    return fetch("https://recepies.local/api/recepies/names")
      .then(this.checkStatus)
      .then(response => response.json())
      .then(json => this.setState({recepies: json, loading: false}))
@@ -32,7 +40,15 @@ class Recepies extends Component {
       return <p>Loading...</p>
     }
 
-    var recepies = this.state.recepies.map((recipe) => <RecipeListItem key={recipe.id} id={recipe.id} title={recipe.title} click={this.props.click} /> );
+    var recepies = this.state.recepies.map((recipe, index) => {
+      return <RecipeListItem
+        key={index}
+        index={index}
+        id={recipe.id}
+        title={recipe.title}
+        click={this.props.click}
+        del={this.deleteRecipe} />
+    });
 
     return (
       <ul className="Recepies">

@@ -1,5 +1,13 @@
 li {
-  color: blue;
   list-style: none;
   cursor: pointer;
+}
+
+li p {
+  display: inline;
+}
+
+li .delete {
+  margin-left: 20px;
+  color: red;
 }
