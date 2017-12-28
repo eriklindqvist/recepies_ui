@@ -37,8 +37,8 @@ class Recipe extends Component {
 
     return (
       <div>
-      <h2>{this.state.recipe.title}</h2>
-      <img src={image} />
+      <h2 onClick={this.props.click.bind(this)}>{this.state.recipe.title}</h2>
+      <img src={image} alt="logo" />
       <h3>Ingredienser</h3>
       <ul>{ingredients}</ul>
       <h3>Beskrivning</h3>
