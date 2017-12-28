@@ -21,7 +21,7 @@ class App extends Component {
     }
 
     this.savedRecipe = function(e) {
-      _this.setState({add: false, recipe: null, recipe_id: this.state.recipe.id});
+      _this.setState({add: false, recipe: this.state.recipe, recipe_id: this.state.recipe.id});
     }
 
     this.resetRecipe = this.resetRecipe.bind(this);
@@ -40,7 +40,7 @@ class App extends Component {
     if (this.state.add) {
       var body = <RecipeForm recipe={this.state.recipe} submit={this.savedRecipe} />;
     } else if (this.state.recipe_id) {
-      body = <Recipe id={this.state.recipe_id} click={this.editRecipe} />;
+      body = <Recipe id={this.state.recipe_id} recipe={this.state.recipe} click={this.editRecipe} />;
     } else {
       body = <Recepies click={this.handleClick} />;
     }

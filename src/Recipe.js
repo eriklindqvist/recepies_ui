@@ -4,7 +4,7 @@ import Ingredient from './Ingredient.js';
 class Recipe extends Component {
   constructor(props) {
     super(props);
-    this.state = { recipe: null, loading: true };
+    this.state = { recipe: this.props.recipe, loading: true };
 
     this.checkStatus = (response) => {
       if (response.status >= 200 && response.status < 300) {
@@ -19,12 +19,16 @@ class Recipe extends Component {
   }
 
   componentDidMount() {
-    return fetch("/api/recipe/"+this.props.id)
-    //return fetch("https://recepies.local/api/recipe/"+this.props.id)
-     .then(this.checkStatus)
-     .then(response => response.json())
-     .then(json => this.setState({recipe: json, loading: false}))
-     .catch(e => console.log(e));
+    if (this.state.recipe) {
+      this.setState({loading: false});
+    } else {
+      return fetch("/api/recipe/" + this.props.id)
+      //return fetch("https://recepies.local/api/recipe/"+this.props.id)
+       .then(this.checkStatus)
+       .then(response => response.json())
+       .then(json => this.setState({recipe: json, loading: false}))
+       .catch(e => console.log(e));
+     }
    }
 
   render() {

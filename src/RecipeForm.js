@@ -1,12 +1,48 @@
 import React, { Component } from 'react';
+import IngredientForm from './IngredientForm.js'
 
 class RecipeForm extends Component {
   constructor(props) {
     super(props);
-    this.state = {recipe: this.props.recipe||{title: "", description:""}};
+    this.state = {recipe: this.props.recipe||{title: "", description:"", url: "", ingredients: []}};
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+
+    var _this = this;
+
+    this.handleChangeIngredient = function(e) {
+      var recipe = _this.state.recipe;
+      var name = e.target.name;
+      var value = e.target.type === "number" ? Number.parseInt(e.target.value, 10) : e.target.value;
+      recipe.ingredients[this.props.index][name] = value;
+      this.setState({[name]: value});
+      _this.setState({recipe: recipe});
+    }
+
+    this.addIngredient = function(e) {
+      e.preventDefault();
+      const ingredient = { amount: null, unit: null, name: null};
+
+      var recipe = _this.state.recipe;
+      var newRecipe = Object.assign({}, recipe);
+      var ingredients = recipe.ingredients.concat(ingredient);
+      newRecipe.ingredients = ingredients;
+
+      _this.setState({recipe: newRecipe});
+    }
+
+    this.deleteIngredient = function(e) {
+      e.preventDefault();
+      var recipe = _this.state.recipe;
+      var newRecipe = Object.assign({}, recipe);
+
+      recipe.ingredients.splice(this.props.index,1);
+
+      newRecipe.ingredients = recipe.ingredients;
+
+      _this.setState({recipe: newRecipe});
+    }
 
     this.checkStatus = (response) => {
       if (response.status >= 200 && response.status < 300) {
@@ -17,6 +53,12 @@ class RecipeForm extends Component {
         error.response = response;
         throw error;
       }
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.recipe !== this.props.recipe) {
+      this.setState({recipe: nextProps.recipe||{title: "", description:"", url: "", ingredients: []}})
     }
   }
 
@@ -38,6 +80,7 @@ class RecipeForm extends Component {
 
      console.log(url);
      console.log(options);
+     console.log(data);
 
      fetch(url, options)
       .then(this.checkStatus)
@@ -48,6 +91,18 @@ class RecipeForm extends Component {
    }
 
   render() {
+    console.log(this.state.recipe);
+    var ingredients = this.state.recipe.ingredients.map((ingredient, index) => {
+      return <IngredientForm
+        key={index}
+        index={index}
+        amount={ingredient.amount}
+        unit={ingredient.unit}
+        name={ingredient.name}
+        change={this.handleChangeIngredient}
+        click={this.deleteIngredient} />
+    });
+
     return (
       <form onSubmit={this.handleSubmit}>
         <label>
@@ -59,7 +114,15 @@ class RecipeForm extends Component {
           Description:
           <textarea name="description" onChange={this.handleChange} value={this.state.recipe.description} />
         </label>
-        <br/>
+        <br />
+        <label>
+          URL:
+          <input type="text" name="url" onChange={this.handleChange} value={this.state.recipe.url} />
+        </label>
+        <br />
+        <h3>Ingredients</h3>
+        {ingredients}
+        <button onClick={this.addIngredient}>Add</button>
         <button>Save</button>
       </form>
     );
