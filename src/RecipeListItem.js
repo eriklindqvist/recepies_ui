@@ -17,8 +17,7 @@ class RecipeListItem extends Component {
 
     this.deleteRecipe = function() {
       if (window.confirm("Are you sure?")) {
-        //var url = "/api/recipe/" + this.props.id;
-        var url = "https://recepies.local/api/recipe/" + this.props.id;
+        var url = "/api/recipe/" + this.props.id;
         var options = {method: "DELETE"};
 
         fetch(url, options)

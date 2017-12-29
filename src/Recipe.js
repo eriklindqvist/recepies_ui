@@ -10,6 +10,7 @@ class Recipe extends Component {
       if (response.status >= 200 && response.status < 300) {
         return response;
       } else {
+        console.log(response);
         let error = new Error(response.statusText);
         error.response = response;
         throw error;
@@ -21,8 +22,7 @@ class Recipe extends Component {
     if (this.state.recipe) {
       this.setState({loading: false});
     } else {
-      //return fetch("/api/recipe/" + this.props.id)
-      return fetch("https://recepies.local/api/recipe/"+this.props.id)
+      return fetch("/api/recipe/" + this.props.id)
        .then(this.checkStatus)
        .then(response => response.json())
        .then(json => this.setState({recipe: json, loading: false}))

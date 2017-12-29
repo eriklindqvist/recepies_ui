@@ -71,8 +71,7 @@ class RecipeForm extends Component {
      e.preventDefault();
 
      var id = !!this.state.recipe.id ? '/'+this.state.recipe.id : ''
-     //var url = "/api/recipe"+id;
-     var url = "https://recepies.local/api/recipe"+id;
+     var url = "/api/recipe" + id;
      var data = JSON.stringify(this.state.recipe);
      var method = this.state.recipe.id ? 'PUT' : 'POST';
      var options = {method: method, body: data};
@@ -80,6 +79,12 @@ class RecipeForm extends Component {
      fetch(url, options)
       .then(this.checkStatus)
       .catch(e => console.log(e));
+
+    var file = document.getElementById('file').files[0];
+
+    if (file) {
+
+    }
 
     this.props.submit.call(this);
    }
@@ -116,6 +121,12 @@ class RecipeForm extends Component {
         <h3>Ingredients</h3>
         {ingredients}
         <button onClick={this.addIngredient}>Add</button>
+        <br/>
+        <label>
+          Image:
+          <input type="file" name="file" id="file" accept=".gif,.jpg,.jpeg,.png" />
+        </label>
+        <br />
         <button>Save</button>
       </form>
     );

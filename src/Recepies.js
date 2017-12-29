@@ -27,8 +27,7 @@ class Recepies extends Component {
   }
 
   componentDidMount() {
-    //return fetch("/api/recepies/names")
-    return fetch("https://recepies.local/api/recepies/names")
+    return fetch("/api/recepies/names")
      .then(this.checkStatus)
      .then(response => response.json())
      .then(json => this.setState({recepies: json, loading: false}))
