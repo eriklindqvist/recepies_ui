@@ -22,7 +22,7 @@ class Recipe extends Component {
     if (this.state.recipe) {
       this.setState({loading: false});
     } else {
-      return fetch("/api/recipe/" + this.props.id)
+      return fetch(`/api/recipe/${this.props.id}`)
        .then(this.checkStatus)
        .then(response => response.json())
        .then(json => this.setState({recipe: json, loading: false}))

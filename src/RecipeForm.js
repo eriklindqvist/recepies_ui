@@ -71,19 +71,27 @@ class RecipeForm extends Component {
      e.preventDefault();
 
      var id = !!this.state.recipe.id ? '/'+this.state.recipe.id : ''
-     var url = "/api/recipe" + id;
+     var url = `/api/recipe${id}`;
      var data = JSON.stringify(this.state.recipe);
      var method = this.state.recipe.id ? 'PUT' : 'POST';
      var options = {method: method, body: data};
 
      fetch(url, options)
       .then(this.checkStatus)
+      .then(response => response.json())
+      .then(json => this.setState({recipe: json}))
       .catch(e => console.log(e));
 
     var file = document.getElementById('file').files[0];
 
     if (file) {
-
+      url = `/api/recipe/${this.state.recipe.id}/upload`;
+      data = new FormData();
+      data.append('file', file)
+      options = {method: 'POST', body: data};
+      fetch(url, options)
+        .then(this.checkStatus)
+        .catch(e => console.log(e));
     }
 
     this.props.submit.call(this);
@@ -100,6 +108,8 @@ class RecipeForm extends Component {
         change={this.handleChangeIngredient}
         click={this.deleteIngredient} />
     });
+
+    var disabled = !this.state.recipe.id;
 
     return (
       <form onSubmit={this.handleSubmit}>
@@ -124,7 +134,7 @@ class RecipeForm extends Component {
         <br/>
         <label>
           Image:
-          <input type="file" name="file" id="file" accept=".gif,.jpg,.jpeg,.png" />
+          <input type="file" name="file" id="file" accept=".gif,.jpg,.jpeg,.png" disabled={disabled} />
         </label>
         <br />
         <button>Save</button>
