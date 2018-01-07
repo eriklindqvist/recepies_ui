@@ -4,7 +4,11 @@ import IngredientForm from './IngredientForm.js'
 class RecipeForm extends Component {
   constructor(props) {
     super(props);
-    this.state = {recipe: this.props.recipe||{title: "", description:"", url: "", ingredients: []}};
+
+    this.state = {
+      recipe: this.props.recipe||{title: "", description:"", url: "", ingredients: []},
+      existingIngredients: null
+    };
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -53,6 +57,14 @@ class RecipeForm extends Component {
         throw error;
       }
     }
+  }
+
+  componentDidMount() {
+    fetch("/api/ingredients")
+      .then(this.checkStatus)
+      .then(response => response.json())
+      .then(json => this.setState({existingIngredients: json}))
+      .catch(e => console.log(e))
   }
 
   componentWillReceiveProps(nextProps) {
@@ -106,7 +118,8 @@ class RecipeForm extends Component {
         unit={ingredient.unit}
         name={ingredient.name}
         change={this.handleChangeIngredient}
-        click={this.deleteIngredient} />
+        click={this.deleteIngredient}
+        ingredients={this.state.existingIngredients} />
     });
 
     var disabled = !this.state.recipe.id;
