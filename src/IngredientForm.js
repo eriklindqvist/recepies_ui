@@ -10,12 +10,12 @@ class IngredientForm extends Component {
   render() {
     return (
       <div>
-        <input type="number" name="amount" min="1" value={this.state.amount||1} onChange={this.props.change.bind(this)} />
+        <input type="number" name="amount" min="1" value={this.state.amount} onChange={this.props.change.bind(this)} />
         <input type="text" name="unit" value={this.state.unit||''} onChange={this.props.change.bind(this)}/>
         <Typeahead name="name"
           value={this.state.name||''}
           options={this.props.ingredients}
-          //onKeyPress={this.props.change.bind(this)}
+          onChange={this.props.change.bind(this)}
           inputProps={{name: 'name'}}
           placeholder='Ingredient' />
         <button onClick={this.props.click.bind(this)}>Del</button>

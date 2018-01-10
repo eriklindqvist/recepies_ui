@@ -34,6 +34,11 @@ class Recepies extends Component {
      .catch(e => console.log(e));
    }
 
+   /*shouldComponentUpdate() {
+     console.log("shouldComponentUpdate?");
+     return true;
+   }*/
+
   render() {
     if (this.state.loading) {
       return <p>Loading...</p>

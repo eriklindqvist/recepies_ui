@@ -26,7 +26,7 @@ class RecipeForm extends Component {
 
     this.addIngredient = function(e) {
       e.preventDefault();
-      const ingredient = { amount: null, unit: null, name: null};
+      const ingredient = { amount: 1, unit: null, name: null};
 
       var recipe = _this.state.recipe;
       var newRecipe = Object.assign({}, recipe);
@@ -92,21 +92,21 @@ class RecipeForm extends Component {
       .then(this.checkStatus)
       .then(response => response.json())
       .then(json => this.setState({recipe: json}))
+      .then(() => {
+        var file = document.getElementById('file').files[0];
+
+        if (file) {
+          url = `/api/recipe/${this.state.recipe.id}/upload`;
+          data = new FormData();
+          data.append('file', file)
+          options = {method: 'POST', body: data};
+          fetch(url, options)
+            .then(this.checkStatus)
+            .catch(e => console.log(e));
+        }
+      })
+      .then(() => this.props.submit.call(this))
       .catch(e => console.log(e));
-
-    var file = document.getElementById('file').files[0];
-
-    if (file) {
-      url = `/api/recipe/${this.state.recipe.id}/upload`;
-      data = new FormData();
-      data.append('file', file)
-      options = {method: 'POST', body: data};
-      fetch(url, options)
-        .then(this.checkStatus)
-        .catch(e => console.log(e));
-    }
-
-    this.props.submit.call(this);
    }
 
   render() {

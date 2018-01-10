@@ -36,17 +36,18 @@ class Recipe extends Component {
     }
 
     var ingredients = this.state.recipe.ingredients.map((ingredient) => <Ingredient key={ingredient.name} amount={ingredient.amount} unit={ingredient.unit} name={ingredient.name} /> );
-    var image = "images/" + this.state.recipe.id + ".jpg";
+    var image = this.state.recipe.image && <img src={"images/thumbs/" + this.state.recipe.image} alt="logo" />;
+    var link = this.state.recipe.url && <a href={this.state.recipe.url}>Originalrecept</a>;
 
     return (
       <div>
       <h2 onClick={this.props.click.bind(this)}>{this.state.recipe.title}</h2>
-      <img src={image} alt="logo" />
+      {image}
       <h3>Ingredienser</h3>
       <ul>{ingredients}</ul>
       <h3>Beskrivning</h3>
       <p>{this.state.recipe.description}</p>
-      <a href={this.state.recipe.url}>Originalrecept</a>
+      {link}
       </div>
     );
   }
