@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import { Panel, FormGroup, ControlLabel, FormControl, Label, Button } from 'react-bootstrap'
+
 import IngredientForm from './IngredientForm.js'
 
 class RecipeForm extends Component {
@@ -15,10 +17,9 @@ class RecipeForm extends Component {
 
     var _this = this;
 
-    this.handleChangeIngredient = function(e) {
+    this.handleChangeIngredient = function(name, val, type) {
       var recipe = _this.state.recipe;
-      var name = e.target.name;
-      var value = e.target.type === "number" ? Number.parseInt(e.target.value, 10) : e.target.value;
+      var value = type === "number" ? Number.parseInt(val, 10) : val;
       recipe.ingredients[this.props.index][name] = value;
       this.setState({[name]: value});
       _this.setState({recipe: recipe});
@@ -75,7 +76,7 @@ class RecipeForm extends Component {
 
    handleChange(e) {
      var recipe = this.state.recipe;
-     recipe[e.target.name] = e.target.value;
+     recipe[e.target.id] = e.target.value;
      this.setState({recipe: recipe});
    }
 
@@ -93,7 +94,7 @@ class RecipeForm extends Component {
       .then(response => response.json())
       .then(json => this.setState({recipe: json}))
       .then(() => {
-        var file = document.getElementById('file').files[0];
+        var file = document.getElementById('image').files[0];
 
         if (file) {
           url = `/api/recipe/${this.state.recipe.id}/upload`;
@@ -125,33 +126,37 @@ class RecipeForm extends Component {
     var disabled = !this.state.recipe.id;
 
     return (
-      <form onSubmit={this.handleSubmit}>
-        <label>
-          Title:
-          <input type="text" name="title" onChange={this.handleChange} value={this.state.recipe.title} />
-        </label>
-        <br />
-        <label>
-          Description:
-          <textarea name="description" onChange={this.handleChange} value={this.state.recipe.description} />
-        </label>
-        <br />
-        <label>
-          URL:
-          <input type="text" name="url" onChange={this.handleChange} value={this.state.recipe.url} />
-        </label>
-        <br />
-        <h3>Ingredients</h3>
-        {ingredients}
-        <button onClick={this.addIngredient}>Add</button>
-        <br/>
-        <label>
-          Image:
-          <input type="file" name="file" id="file" accept=".gif,.jpg,.jpeg,.png" disabled={disabled} />
-        </label>
-        <br />
-        <button>Save</button>
-      </form>
+      <Panel>
+        <form onSubmit={this.handleSubmit}>
+
+          <FormGroup controlId="title">
+            <ControlLabel>Title of the recipe</ControlLabel>
+            <FormControl type="text" value={this.state.recipe.title} placeholder="Enter title" onChange={this.handleChange}	/>
+          </FormGroup>
+
+          <FormGroup controlId="description">
+            <ControlLabel>Description</ControlLabel>
+            <FormControl componentClass="textarea" value={this.state.recipe.description} placeholder="Enter description" onChange={this.handleChange}	/>
+          </FormGroup>
+
+          <FormGroup controlId="url">
+            <ControlLabel>URL to original recipe</ControlLabel>
+            <FormControl type="url" value={this.state.recipe.url} placeholder="Enter URL" onChange={this.handleChange}	/>
+          </FormGroup>
+
+          <h3>Ingredients</h3>
+          {ingredients}
+
+          <Label bsStyle="success" onClick={this.addIngredient}>Add ingredient</Label>
+
+          <FormGroup controlId="image">
+            <ControlLabel>Upload an image</ControlLabel>
+            <FormControl type="file" accept=".gif,.jpg,.jpeg,.png" disabled={disabled} />
+          </FormGroup>
+
+          <Button type="submit">Save</Button>
+        </form>
+      </Panel>
     );
   }
 }

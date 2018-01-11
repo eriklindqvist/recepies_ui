@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+import { Panel } from 'react-bootstrap'
+
+import './Recipe.css';
+
 import Ingredient from './Ingredient.js';
 
 class Recipe extends Component {
@@ -40,15 +44,15 @@ class Recipe extends Component {
     var link = this.state.recipe.url && <a href={this.state.recipe.url}>Originalrecept</a>;
 
     return (
-      <div>
-      <h2 onClick={this.props.click.bind(this)}>{this.state.recipe.title}</h2>
-      {image}
-      <h3>Ingredienser</h3>
-      <ul>{ingredients}</ul>
-      <h3>Beskrivning</h3>
-      <p>{this.state.recipe.description}</p>
-      {link}
-      </div>
+      <Panel>
+        <h2 onClick={this.props.click.bind(this)}>{this.state.recipe.title}</h2>
+        {image}
+        <h4>Ingredienser</h4>
+        <ul>{ingredients}</ul>
+        <h4>Beskrivning</h4>
+        <p>{this.state.recipe.description}</p>
+        {link}
+      </Panel>
     );
   }
 }

@@ -1,13 +1,8 @@
-li {
-  list-style: none;
-  cursor: pointer;
+.list-group-item h4 {
+  float: left;
 }
 
-li p {
-  display: inline;
-}
-
-li .delete {
-  margin-left: 20px;
-  color: red;
+.list-group-item .label {
+  margin: 4px;
+  float: right;
 }

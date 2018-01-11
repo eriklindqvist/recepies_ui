@@ -1,0 +1,23 @@
+.form-inline {
+  margin-top: 10px;
+}
+
+.form-inline label {
+  margin-right: 10px;
+}
+
+.form-inline input {
+  margin-right: 20px;
+}
+
+.form-inline input[type=number] {
+  width: 8rem;
+}
+
+.form-inline .rbt {
+  display: inline-block;
+}
+
+.form-inline .label {
+  margin-left: 10px;
+}

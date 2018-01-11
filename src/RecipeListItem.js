@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
+import { ListGroupItem, Label } from 'react-bootstrap';
+
 import './RecipeListItem.css';
 
 class RecipeListItem extends Component {
   constructor(props) {
     super(props);
+    this.state = { recipe: this.props.recipe };
 
     this.checkStatus = (response) => {
       if (response.status >= 200 && response.status < 300) {
@@ -30,10 +33,10 @@ class RecipeListItem extends Component {
 
   render() {
     return (
-      <li>
-        <p onClick={this.props.click.bind(this)}>{this.props.title}</p>
-        <p onClick={this.deleteRecipe.bind(this)} className="delete">X</p>
-      </li>
+      <ListGroupItem onClick={this.props.click.bind(this)} header={this.state.recipe.title}>
+        <Label bsStyle="info" onClick={this.props.edit.bind(this)}>edit</Label>
+        <Label bsStyle="danger" onClick={this.deleteRecipe.bind(this)}>delete</Label>
+      </ListGroupItem>
     );
   }
 }

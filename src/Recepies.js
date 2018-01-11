@@ -1,4 +1,8 @@
 import React, { Component } from 'react';
+import { ListGroup } from 'react-bootstrap'
+
+import './Recepies.css';
+
 import RecipeListItem from './RecipeListItem.js'
 
 class Recepies extends Component {
@@ -9,7 +13,6 @@ class Recepies extends Component {
     var _this = this;
 
     this.deleteRecipe = function() {
-      console.log("deleted: " + this.props.id + " with index " + this.props.index);
       var recepies = _this.state.recepies;
       recepies.splice(this.props.index, 1);
       _this.setState({recepies: recepies});
@@ -27,17 +30,12 @@ class Recepies extends Component {
   }
 
   componentDidMount() {
-    return fetch("/api/recepies/names")
+    return fetch("/api/recepies")
      .then(this.checkStatus)
      .then(response => response.json())
      .then(json => this.setState({recepies: json, loading: false}))
      .catch(e => console.log(e));
    }
-
-   /*shouldComponentUpdate() {
-     console.log("shouldComponentUpdate?");
-     return true;
-   }*/
 
   render() {
     if (this.state.loading) {
@@ -48,16 +46,16 @@ class Recepies extends Component {
       return <RecipeListItem
         key={index}
         index={index}
-        id={recipe.id}
-        title={recipe.title}
+        recipe={recipe}
         click={this.props.click}
+        edit={this.props.edit}
         del={this.deleteRecipe} />
     });
 
     return (
-      <ul className="Recepies">
+      <ListGroup className="Recepies">
         {recepies}
-      </ul>
+      </ListGroup>
     );
   }
 }

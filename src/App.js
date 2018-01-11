@@ -13,7 +13,7 @@ class App extends Component {
     var _this = this;
 
     this.handleClick = function(e) {
-      _this.setState({recipe_id: this.props.id});
+      _this.setState({recipe_id: this.state.recipe.id});
     }
 
     this.editRecipe = function(e) {
@@ -41,17 +41,19 @@ class App extends Component {
       var body = <RecipeForm recipe={this.state.recipe} submit={this.savedRecipe} />;
     } else if (this.state.recipe_id) {
       body = <Recipe id={this.state.recipe_id} recipe={this.state.recipe} click={this.editRecipe} />;
+      var create = <h5 onClick={this.addRecipe}>Create new recipe</h5>;
     } else {
-      body = <Recepies click={this.handleClick} />;
+      body = <Recepies click={this.handleClick} edit={this.editRecipe} />;
+      create = <h5 onClick={this.addRecipe}>Create new recipe</h5>;
     }
 
     return (
       <div className="App">
         <header className="header">
-          <h1 className="title" onClick={this.resetRecipe}>Recept</h1>
-          <h3 onClick={this.addRecipe}>Nytt recept</h3>
+          <h1 className="display-1" onClick={this.resetRecipe}>Recepies</h1>
         </header>
         {body}
+        {create}
       </div>
     );
   }
