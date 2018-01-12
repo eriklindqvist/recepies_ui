@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Panel, Label, Image } from 'react-bootstrap'
+import { Panel, Label, Image } from 'react-bootstrap';
+import Markdown from 'react-remarkable';
 
 import './Recipe.css';
 
@@ -51,7 +52,7 @@ class Recipe extends Component {
         <h4>Ingredienser</h4>
         <ul>{ingredients}</ul>
         <h4>Beskrivning</h4>
-        <p>{this.state.recipe.description}</p>
+        <Markdown>{this.state.recipe.description}</Markdown>
         {link}
         <br />
       </Panel>
