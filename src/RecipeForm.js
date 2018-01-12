@@ -11,7 +11,8 @@ class RecipeForm extends Component {
 
     this.state = {
       recipe: this.props.recipe||{title: "", description:"", url: "", ingredients: []},
-      existingIngredients: null
+      existingIngredients: null,
+      existingUnits: null
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -63,11 +64,16 @@ class RecipeForm extends Component {
   }
 
   componentDidMount() {
-    fetch("/api/ingredients")
-      .then(this.checkStatus)
-      .then(response => response.json())
-      .then(json => this.setState({existingIngredients: json}))
-      .catch(e => console.log(e))
+    [
+      ["ingredients", "existingIngredients"],
+      ["units","existingUnits"]
+    ].forEach((a) => {
+      fetch("/api/"+a[0])
+        .then(this.checkStatus)
+        .then(response => response.json())
+        .then(json => this.setState({[a[1]]: json}))
+        .catch(e => console.log(e))
+    });
   }
 
   componentWillReceiveProps(nextProps) {
@@ -122,7 +128,8 @@ class RecipeForm extends Component {
         name={ingredient.name}
         change={this.handleChangeIngredient}
         click={this.deleteIngredient}
-        ingredients={this.state.existingIngredients} />
+        ingredients={this.state.existingIngredients}
+        units={this.state.existingUnits} />
     });
 
     var disabled = !this.state.recipe.id;
@@ -152,7 +159,7 @@ class RecipeForm extends Component {
           <Label bsStyle="success" onClick={this.addIngredient}>Add ingredient</Label>
 
           <Panel>
-            <Image src={"images/thumbs/" + this.state.recipe.image} alt="logo" />
+            <Image src={"images/thumbs/" + this.state.recipe.image} thumbnail />
             <FormGroup controlId="image">
               <ControlLabel>Upload an image</ControlLabel>
               <FormControl type="file" accept=".gif,.jpg,.jpeg,.png" disabled={disabled} />

@@ -5,3 +5,8 @@
 .panel br {
   clear: both;
 }
+
+.panel .label-success {
+  clear: both;
+  display: table;
+}

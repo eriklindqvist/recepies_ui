@@ -21,3 +21,46 @@
 .form-inline .label {
   margin-left: 10px;
 }
+
+.ingredient .form-group {
+  float: left;
+  margin-bottom: 5px;
+}
+
+.ingredient .name {
+  float: unset;
+  margin-left: 128px;
+  margin-right: 56px;
+}
+
+.ingredient .form-group input[type=number] {
+  width: 50pt;
+  border-radius: 4px 0 0 4px;
+  margin-right: -8px;
+}
+
+.ingredient .form-group .rbt-input {
+  border-radius: 0 4px 4px 0;
+}
+
+.ingredient .name .rbt-input {
+  margin-left: -8px;
+}
+
+.ingredient .form-group .rbt-input-main[name="unit"] {
+  width: 30pt !important;
+}
+
+.ingredient .form-group .rbt-input-main[name="name"] {
+  margin-right: auto;
+  width: 100%;
+  display: block;
+}
+
+.ingredient .label-danger {
+  float: right;
+}
+
+.ingredient {
+  clear: both;
+}

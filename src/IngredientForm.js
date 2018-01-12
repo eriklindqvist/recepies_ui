@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Typeahead } from 'react-bootstrap-typeahead';
-import { ControlLabel, Form, FormGroup, FormControl, Label } from 'react-bootstrap';
+import { FormGroup, FormControl, Label } from 'react-bootstrap';
 import './IngredientForm.css';
 
 class IngredientForm extends Component {
@@ -13,7 +13,7 @@ class IngredientForm extends Component {
   }
 
   handleChange(e) {
-    this.props.change.call(this, e.target.name, e.target.value, e.target.type);
+    this.props.change.call(this, e.target.id, e.target.value, e.target.type);
   }
 
   handleTypeahead(name, type) {
@@ -24,27 +24,28 @@ class IngredientForm extends Component {
 
   render() {
     return (
-      <Form inline>
+      <div className="ingredient">
+        <Label bsStyle="danger" onClick={this.props.click.bind(this)}>Delete</Label>
         <FormGroup controlId="amount">
-          <ControlLabel>Amount</ControlLabel>
           <FormControl type="number" min="1" value={this.state.amount} onChange={this.handleChange} />
         </FormGroup>
-        <FormGroup controlId="unit">
-          <ControlLabel>Unit</ControlLabel>
-          <FormControl type="text" placeholder="Unit" value={this.state.unit} onChange={this.handleChange} />
+        <FormGroup className="unit">
+          <Typeahead emptyLabel=''
+            options={this.props.units||[]}
+            onInputChange={this.handleTypeahead("unit", "text")}
+            inputProps={{name: 'unit', value: this.state.unit}}
+            selected={this.state.unit.length > 0 ? [this.state.unit] : []}
+            placeholder='Unit' />
         </FormGroup>
-        <FormGroup>
-          <ControlLabel>Name</ControlLabel>
-          <Typeahead allowNew newSelectionPrefix=''
-            value={this.state.name}
+        <FormGroup className="name">
+          <Typeahead emptyLabel=''
             options={this.props.ingredients||[]}
             onInputChange={this.handleTypeahead("name", "text")}
-            inputProps={{name: 'name', value: this.state.name}}
-            selected={[this.state.name]}
+            inputProps={{name: 'name'}}
+            selected={this.state.name.length > 0 ? [this.state.name] : []}
             placeholder='Ingredient' />
           </FormGroup>
-          <Label bsStyle="danger" onClick={this.props.click.bind(this)}>Delete</Label>
-      </Form>
+      </div>
     );
   }
 }
