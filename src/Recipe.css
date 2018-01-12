@@ -6,3 +6,13 @@
 .panel h2 {
   margin: 0;
 }
+
+.panel .label {
+  cursor: pointer;
+}
+
+.panel img {
+  display: inline;
+  float: right;
+  margin: 10px 0px;
+}

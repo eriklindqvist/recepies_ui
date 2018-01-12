@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Panel } from 'react-bootstrap'
+import { Panel, Label, Image } from 'react-bootstrap'
 
 import './Recipe.css';
 
@@ -40,18 +40,20 @@ class Recipe extends Component {
     }
 
     var ingredients = this.state.recipe.ingredients.map((ingredient) => <Ingredient key={ingredient.name} amount={ingredient.amount} unit={ingredient.unit} name={ingredient.name} /> );
-    var image = this.state.recipe.image && <img src={"images/thumbs/" + this.state.recipe.image} alt="logo" />;
+    var image = this.state.recipe.image && <Image src={"images/thumbs/" + this.state.recipe.image} thumbnail />;
     var link = this.state.recipe.url && <a href={this.state.recipe.url}>Originalrecept</a>;
 
     return (
       <Panel>
-        <h2 onClick={this.props.click.bind(this)}>{this.state.recipe.title}</h2>
+        <h2>{this.state.recipe.title}</h2>
+        <Label bsStyle="info" onClick={this.props.click.bind(this)}>Edit recipe</Label>
         {image}
         <h4>Ingredienser</h4>
         <ul>{ingredients}</ul>
         <h4>Beskrivning</h4>
         <p>{this.state.recipe.description}</p>
         {link}
+        <br />
       </Panel>
     );
   }

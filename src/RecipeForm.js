@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
-import { Panel, FormGroup, ControlLabel, FormControl, Label, Button } from 'react-bootstrap'
+import { Panel, FormGroup, ControlLabel, FormControl, Label, Button, Image } from 'react-bootstrap'
 
 import IngredientForm from './IngredientForm.js'
+
+import './RecipeForm.css';
 
 class RecipeForm extends Component {
   constructor(props) {
@@ -149,11 +151,14 @@ class RecipeForm extends Component {
 
           <Label bsStyle="success" onClick={this.addIngredient}>Add ingredient</Label>
 
-          <FormGroup controlId="image">
-            <ControlLabel>Upload an image</ControlLabel>
-            <FormControl type="file" accept=".gif,.jpg,.jpeg,.png" disabled={disabled} />
-          </FormGroup>
-
+          <Panel>
+            <Image src={"images/thumbs/" + this.state.recipe.image} alt="logo" />
+            <FormGroup controlId="image">
+              <ControlLabel>Upload an image</ControlLabel>
+              <FormControl type="file" accept=".gif,.jpg,.jpeg,.png" disabled={disabled} />
+            </FormGroup>
+            <br />
+          </Panel>
           <Button type="submit">Save</Button>
         </form>
       </Panel>
