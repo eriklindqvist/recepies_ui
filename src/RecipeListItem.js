@@ -32,10 +32,15 @@ class RecipeListItem extends Component {
   }
 
   render() {
+    if (this.props.token) {
+      var edit = <Label bsStyle="info" onClick={this.props.edit.bind(this)}>edit</Label>
+      var del = <Label bsStyle="danger" onClick={this.deleteRecipe.bind(this)}>delete</Label>
+    }
+
     return (
       <ListGroupItem onClick={this.props.click.bind(this)} header={this.state.recipe.title}>
-        <Label bsStyle="info" onClick={this.props.edit.bind(this)}>edit</Label>
-        <Label bsStyle="danger" onClick={this.deleteRecipe.bind(this)}>delete</Label>
+        {edit}
+        {del}
       </ListGroupItem>
     );
   }

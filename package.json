@@ -25,6 +25,13 @@
       "pathRewrite": {
         "^/api": ""
       }
+    },
+    "/auth": {
+      "target": "http://localhost:3002",
+      "ws": true,
+      "pathRewrite": {
+        "^/auth": ""
+      }
     }
   }
 }

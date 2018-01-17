@@ -30,7 +30,9 @@ class Recepies extends Component {
   }
 
   componentDidMount() {
-    return fetch("/api/recepies")
+    var options = {headers: {'Authorization':`Bearer ${this.props.token}`}};
+
+    return fetch("/api/recepies", options)
      .then(this.checkStatus)
      .then(response => response.json())
      .then(json => this.setState({recepies: json, loading: false}))
@@ -49,7 +51,8 @@ class Recepies extends Component {
         recipe={recipe}
         click={this.props.click}
         edit={this.props.edit}
-        del={this.deleteRecipe} />
+        del={this.deleteRecipe}
+        token={this.props.token} />
     });
 
     return (

@@ -95,7 +95,8 @@ class RecipeForm extends Component {
      var url = `/api/recipe${id}`;
      var data = JSON.stringify(this.state.recipe);
      var method = this.state.recipe.id ? 'PUT' : 'POST';
-     var options = {method: method, body: data};
+     var headers = {'Authorization':`Bearer ${this.props.token}`}
+     var options = {method: method, headers: headers, body: data};
 
      fetch(url, options)
       .then(this.checkStatus)
@@ -108,7 +109,7 @@ class RecipeForm extends Component {
           url = `/api/recipe/${this.state.recipe.id}/upload`;
           data = new FormData();
           data.append('file', file)
-          options = {method: 'POST', body: data};
+          options = {method: 'POST', headers: headers, body: data};
           fetch(url, options)
             .then(this.checkStatus)
             .catch(e => console.log(e));
