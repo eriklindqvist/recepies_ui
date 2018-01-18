@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ListGroupItem, Label } from 'react-bootstrap';
+import { Alert, Collapse, Glyphicon, ListGroupItem, Label } from 'react-bootstrap';
 
 import './RecipeListItem.css';
 
@@ -18,15 +18,20 @@ class RecipeListItem extends Component {
       }
     }
 
-    this.deleteRecipe = function() {
+    this.deleteRecipe = function(e) {
+      e.stopPropagation();
+
       if (window.confirm("Are you sure?")) {
-        var url = "/api/recipe/" + this.props.id;
-        var options = {method: "DELETE"};
+        var url = "/api/recipe/" + this.props.recipe.id;
+        var options = {method: "DELETE", headers: {'Authorization':`Bearer: ${this.props.token}`}};
 
         fetch(url, options)
           .then(this.checkStatus)
           .then(r => this.props.del.call(this))
-          .catch(e => console.log(e));
+          .catch(e => {
+            this.setState({error: e.message})
+            setTimeout(() => {this.setState({error: null})}, 3000);
+          });
       }
     }
   }
@@ -38,10 +43,17 @@ class RecipeListItem extends Component {
     }
 
     return (
-      <ListGroupItem onClick={this.props.click.bind(this)} header={this.state.recipe.title}>
-        {edit}
-        {del}
-      </ListGroupItem>
+      <div>
+        <ListGroupItem onClick={this.props.click.bind(this)} header={this.state.recipe.title}>
+          {edit}
+          {del}
+        </ListGroupItem>
+        <Collapse in={!!this.state.error}>
+          <Alert bsStyle="danger">
+            <Glyphicon glyph="exclamation-sign" /> {this.state.error}
+          </Alert>
+        </Collapse>
+      </div>
     );
   }
 }

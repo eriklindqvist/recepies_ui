@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Panel, Label, Image } from 'react-bootstrap';
+import { Alert, Collapse, Glyphicon, Panel, Label, Image } from 'react-bootstrap';
 import Markdown from 'react-remarkable';
 
 import './Recipe.css';
@@ -33,13 +33,25 @@ class Recipe extends Component {
        .then(this.checkStatus)
        .then(response => response.json())
        .then(json => this.setState({recipe: json, loading: false}))
-       .catch(e => console.log(e));
+       .catch(e => this.setState({recipe: null, loading: false, error: e.message}))
      }
    }
 
   render() {
     if (this.state.loading) {
       return <p>Loading...</p>
+    }
+
+    if (this.state.error) {
+      return (
+        <Panel>
+          <Collapse in={!!this.state.error}>
+            <Alert bsStyle="danger">
+              <Glyphicon glyph="exclamation-sign" /> <strong>Could not read recipe:</strong> {this.state.error}
+            </Alert>
+          </Collapse>
+        </Panel>
+      )
     }
 
     var ingredients = this.state.recipe.ingredients.map((ingredient) => <Ingredient key={ingredient.name} amount={ingredient.amount} unit={ingredient.unit} name={ingredient.name} /> );

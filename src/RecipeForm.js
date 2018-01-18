@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Panel, FormGroup, ControlLabel, FormControl, Label, Button, Image } from 'react-bootstrap'
+import { Alert, Collapse, Glyphicon, Panel, FormGroup, ControlLabel, FormControl, Label, Button, Image } from 'react-bootstrap'
 
 import IngredientForm from './IngredientForm.js'
 
@@ -112,11 +112,17 @@ class RecipeForm extends Component {
           options = {method: 'POST', headers: headers, body: data};
           fetch(url, options)
             .then(this.checkStatus)
-            .catch(e => console.log(e));
+            .catch(e => {
+              this.setState({error: e.message})
+              setTimeout(() => {this.setState({error: null})}, 3000);
+            });
         }
       })
       .then(() => this.props.submit.call(this))
-      .catch(e => console.log(e));
+      .catch(e => {
+        this.setState({error: e.message})
+        setTimeout(() => {this.setState({error: null})}, 3000);
+      });
    }
 
   render() {
@@ -168,6 +174,11 @@ class RecipeForm extends Component {
             <br />
           </Panel>
           <Button type="submit">Save</Button>
+          <Collapse in={!!this.state.error}>
+            <Alert bsStyle="danger">
+              <Glyphicon glyph="exclamation-sign" /> <strong>Could not save recipe:</strong> {this.state.error}
+            </Alert>
+          </Collapse>
         </form>
       </Panel>
     );

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ListGroup } from 'react-bootstrap'
+import { Alert, Collapse, Glyphicon, ListGroup } from 'react-bootstrap'
 
 import './Recepies.css';
 
@@ -36,7 +36,7 @@ class Recepies extends Component {
      .then(this.checkStatus)
      .then(response => response.json())
      .then(json => this.setState({recepies: json, loading: false}))
-     .catch(e => console.log(e));
+     .catch(e => this.setState({recepies: null, loading: false, error: e.message}))
    }
 
   render() {
@@ -44,7 +44,7 @@ class Recepies extends Component {
       return <p>Loading...</p>
     }
 
-    var recepies = this.state.recepies.map((recipe, index) => {
+    var recepies = this.state.recepies && this.state.recepies.map((recipe, index) => {
       return <RecipeListItem
         key={index}
         index={index}
@@ -58,6 +58,11 @@ class Recepies extends Component {
     return (
       <ListGroup className="Recepies">
         {recepies}
+        <Collapse in={!!this.state.error}>
+          <Alert bsStyle="danger">
+            <Glyphicon glyph="exclamation-sign" /> <strong>Could not get recepies:</strong> {this.state.error}
+          </Alert>
+        </Collapse>
       </ListGroup>
     );
   }
