@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Glyphicon, OverlayTrigger, Tooltip } from 'react-bootstrap';
 import Login from './Login.js'
 import Recepies from './Recepies.js'
 import Recipe from './Recipe.js'
@@ -54,7 +55,20 @@ class App extends Component {
   render() {
     var body, create;
 
-    var login = this.state.token ? <label onClick={this.logout}>Logout</label> : <label onClick={this.login}>Login</label>
+    var tooltip = (
+    	<Tooltip id="tooltip">
+    		{this.state.token ? 'Log out' : 'Log in'}
+    	</Tooltip>
+    );
+
+    var login = (
+        <h4>
+          <OverlayTrigger placement="left" overlay={tooltip}>
+            <Glyphicon glyph={this.state.token ? 'log-out' : 'log-in'} onClick={this.state.token ? this.logout : this.login} />
+          </OverlayTrigger>
+        </h4>
+    )
+    //var login = this.state.token ? <label onClick={this.logout}>Logout</label> : <label onClick={this.login}>Login</label>
 
     if (this.state.login) {
       body = <Login submit={this.setToken}>Login</Login>;
