@@ -9,12 +9,11 @@ class Login extends Component {
     this.state = {username: "", password: ""};
 
     this.checkStatus = (response) => {
+      let text = response.text()
       if (response.status >= 200 && response.status < 300) {
-        return response;
+        return text;
       } else {
-        let error = new Error(response.statusText);
-        error.response = response;
-        throw error;
+        return text.then(err => {throw err})
       }
     }
 
@@ -25,14 +24,13 @@ class Login extends Component {
   handleSubmit(e) {
     e.preventDefault();
 
-    var hash = Bcrypt.hashSync(this.state.password, "$2a$10$Jq0sDp9vs4Asc/kHSmpUke");
+    var hash = Bcrypt.hashSync(this.state.password, "$2a$10$Jq0sDp9vs4Asc/kHSmpUke").substr(29);
     var options = {method: 'POST', headers: {'Content-Type':'application/x-www-form-urlencoded'}, body: `username=${this.state.username}&password=${hash}`};
 
     fetch("/auth", options)
       .then(this.checkStatus)
-      .then(response => response.text())
       .then(token => this.props.submit.call(this, token))
-      .catch(e => this.setState({error: e.message}));
+      .catch(err => this.setState({error: err}));
   }
 
   handleChange(e) {
