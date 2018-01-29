@@ -68,7 +68,6 @@ class App extends Component {
           </OverlayTrigger>
         </h4>
     )
-    //var login = this.state.token ? <label onClick={this.logout}>Logout</label> : <label onClick={this.login}>Login</label>
 
     if (this.state.login) {
       body = <Login submit={this.setToken}>Login</Login>;

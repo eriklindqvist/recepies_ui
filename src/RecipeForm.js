@@ -17,6 +17,7 @@ class RecipeForm extends Component {
 
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.uploadFile = this.uploadFile.bind(this);
 
     var _this = this;
 
@@ -68,7 +69,7 @@ class RecipeForm extends Component {
       ["ingredients", "existingIngredients"],
       ["units","existingUnits"]
     ].forEach((a) => {
-      fetch("/api/"+a[0])
+      fetch(`/api/${a[0]}`)
         .then(this.checkStatus)
         .then(response => response.json())
         .then(json => this.setState({[a[1]]: json}))
@@ -88,6 +89,29 @@ class RecipeForm extends Component {
      this.setState({recipe: recipe});
    }
 
+   uploadFile(e) {
+     e.preventDefault();
+
+     var file = e.target.files[0];
+     var url = `/api/recipe/${this.state.recipe.id}/upload`;
+     var headers = {'Authorization':`Bearer ${this.props.token}`}
+     var data = new FormData();
+     data.append('file', file)
+     var options = {method: 'POST', headers: headers, body: data};
+
+     fetch(url, options)
+       .then(this.checkStatus)
+       .then(json => {
+         var recipe = this.state.recipe;
+         recipe.image = file.name;
+         this.setState({recipe: recipe})
+       })
+       .catch(e => {
+         this.setState({error: e.message})
+         setTimeout(() => {this.setState({error: null})}, 3000);
+       });
+   }
+
    handleSubmit(e) {
      e.preventDefault();
 
@@ -102,27 +126,13 @@ class RecipeForm extends Component {
       .then(this.checkStatus)
       .then(response => response.json())
       .then(json => this.setState({recipe: json}))
-      .then(() => {
-        var file = document.getElementById('image').files[0];
-
-        if (file) {
-          url = `/api/recipe/${this.state.recipe.id}/upload`;
-          data = new FormData();
-          data.append('file', file)
-          options = {method: 'POST', headers: headers, body: data};
-          fetch(url, options)
-            .then(this.checkStatus)
-            .catch(e => {
-              this.setState({error: e.message})
-              setTimeout(() => {this.setState({error: null})}, 3000);
-            });
-        }
-      })
       .then(() => this.props.submit.call(this))
       .catch(e => {
         this.setState({error: e.message})
         setTimeout(() => {this.setState({error: null})}, 3000);
       });
+
+      return false;
    }
 
   render() {
@@ -140,10 +150,11 @@ class RecipeForm extends Component {
     });
 
     var disabled = !this.state.recipe.id;
+    var image = this.state.recipe.image && <Image src={"images/thumbs/" + this.state.recipe.image} thumbnail />
 
     return (
       <Panel>
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={() => {return false;}}>
 
           <FormGroup controlId="title">
             <ControlLabel>Title of the recipe</ControlLabel>
@@ -166,14 +177,14 @@ class RecipeForm extends Component {
           <Label bsStyle="success" onClick={this.addIngredient}>Add ingredient</Label>
 
           <Panel>
-            <Image src={"images/thumbs/" + this.state.recipe.image} thumbnail />
+            {image}
             <FormGroup controlId="image">
               <ControlLabel>Upload an image</ControlLabel>
-              <FormControl type="file" accept=".gif,.jpg,.jpeg,.png" disabled={disabled} />
+              <FormControl type="file" accept=".gif,.jpg,.jpeg,.png" disabled={disabled} onChange={this.uploadFile}/>
             </FormGroup>
             <br />
           </Panel>
-          <Button type="submit">Save</Button>
+          <Button type="submit" onClick={this.handleSubmit}>Save</Button>
           <Collapse in={!!this.state.error}>
             <Alert bsStyle="danger">
               <Glyphicon glyph="exclamation-sign" /> <strong>Could not save recipe:</strong> {this.state.error}
