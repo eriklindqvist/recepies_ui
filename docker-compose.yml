@@ -1,6 +1,6 @@
 version: "2.0"
 services:
   recipe_ui:
-    image: recipe_ui
+    image: recepies_ui
     ports:
       - "3003:3003"

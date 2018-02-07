@@ -9,7 +9,8 @@ fi
 cd ..
 
 npm run build
-docker build -t recipe_ui .
+docker build -t recepies_ui .
+docker tag recepies_ui:latest proto:5000/recepies_ui
 
 # Restore symbolic link
 if [ ! -z ${arr+x} ]; then
