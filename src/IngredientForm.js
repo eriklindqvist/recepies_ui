@@ -13,12 +13,12 @@ class IngredientForm extends Component {
   }
 
   handleChange(e) {
-    this.props.change.call(this, e.target.id, e.target.value, e.target.type);
+    this.props.change.call(this, this.props.group, e.target.id, e.target.value, e.target.type);
   }
 
   handleTypeahead(name, type) {
     return function(value) {
-      this.props.change.call(this, name, value, type);
+      this.props.change.call(this, this.props.group, name, value, type);
     }.bind(this);
   }
 
@@ -27,7 +27,7 @@ class IngredientForm extends Component {
       <div className="ingredient">
         <Label bsStyle="danger" onClick={this.props.click.bind(this)}>Delete</Label>
         <FormGroup controlId="amount">
-          <FormControl type="number" min="1" value={this.state.amount} onChange={this.handleChange} />
+          <FormControl type="number" step="0.1" min="0" value={this.state.amount} onChange={this.handleChange} />
         </FormGroup>
         <FormGroup className="unit">
           <Typeahead emptyLabel=''

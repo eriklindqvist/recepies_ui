@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Alert, Collapse, Glyphicon, Panel, FormGroup, ControlLabel, FormControl, Label, Button, Image } from 'react-bootstrap'
 
-import IngredientForm from './IngredientForm.js'
+import IngredientFormGroup from './IngredientFormGroup.js'
 
 import './RecipeForm.css';
 
@@ -21,12 +21,11 @@ class RecipeForm extends Component {
 
     var _this = this;
 
-    this.handleChangeIngredient = function(name, val, type) {
+    this.handleChangeIngredient = function(group, name, val, type) {
       var recipe = _this.state.recipe;
-      var value = type === "number" ? Number.parseInt(val, 10) : val;
-      recipe.ingredients[this.props.index][name] = value;
+      var value = type === "number" ? Number.parseFloat(val, 10) : val;
+      recipe.ingredients[group].ingredients[this.props.index][name] = value;
       this.setState({[name]: value});
-      _this.setState({recipe: recipe});
     }
 
     this.addIngredient = function(e) {
@@ -35,10 +34,31 @@ class RecipeForm extends Component {
 
       var recipe = _this.state.recipe;
       var newRecipe = Object.assign({}, recipe);
-      var ingredients = recipe.ingredients.concat(ingredient);
-      newRecipe.ingredients = ingredients;
+      var lastGroup = recipe.ingredients[recipe.ingredients.length - 1];
+      var ingredients = lastGroup.ingredients.concat(ingredient);
+      newRecipe.ingredients[newRecipe.ingredients.length - 1].ingredients = ingredients;
 
       _this.setState({recipe: newRecipe});
+    }
+
+    this.addLabel = function(e) {
+      e.preventDefault();
+
+      var recipe = _this.state.recipe;
+      var newRecipe = Object.assign({}, recipe);
+      newRecipe.ingredients.push({title: '', ingredients: []});
+
+      _this.setState({recipe: newRecipe});
+    }
+
+    this.changeLabel = function(group, value) {
+      var recipe = _this.state.recipe;
+      var newRecipe = Object.assign({}, recipe);
+
+      newRecipe.ingredients[group].title = value;
+
+      this.setState({title: value});
+      _this.setState({recipe: recipe});
     }
 
     this.deleteIngredient = function(e) {
@@ -46,10 +66,8 @@ class RecipeForm extends Component {
       var recipe = _this.state.recipe;
       var newRecipe = Object.assign({}, recipe);
 
-      recipe.ingredients.splice(this.props.index,1);
-
-      newRecipe.ingredients = recipe.ingredients;
-
+      var ingredients = recipe.ingredients[this.props.group].ingredients.filter((_, i) => i !== this.props.index);
+      newRecipe.ingredients[this.props.group].ingredients = ingredients;
       _this.setState({recipe: newRecipe});
     }
 
@@ -136,16 +154,15 @@ class RecipeForm extends Component {
    }
 
   render() {
-    var ingredients = this.state.recipe.ingredients.map((ingredient, index) => {
-      return <IngredientForm
+    var groups = this.state.recipe.ingredients.map((group, index) => {
+      return <IngredientFormGroup
         key={index}
-        index={index}
-        amount={ingredient.amount}
-        unit={ingredient.unit}
-        name={ingredient.name}
+        group={index}
+        title={group.title}
+        ingredients={group.ingredients}
         change={this.handleChangeIngredient}
+        changeLabel={this.changeLabel}
         click={this.deleteIngredient}
-        ingredients={this.state.existingIngredients}
         units={this.state.existingUnits} />
     });
 
@@ -172,9 +189,10 @@ class RecipeForm extends Component {
           </FormGroup>
 
           <h3>Ingredients</h3>
-          {ingredients}
+          {groups}
 
           <Label bsStyle="success" onClick={this.addIngredient}>Add ingredient</Label>
+          <Label bsStyle="info" onClick={this.addLabel}>Add label</Label>
 
           <Panel>
             {image}

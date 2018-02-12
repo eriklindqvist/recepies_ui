@@ -4,7 +4,7 @@ import Markdown from 'react-remarkable';
 
 import './Recipe.css';
 
-import Ingredient from './Ingredient.js';
+import IngredientGroup from './IngredientGroup.js';
 
 class Recipe extends Component {
   constructor(props) {
@@ -54,7 +54,8 @@ class Recipe extends Component {
       )
     }
 
-    var ingredients = this.state.recipe.ingredients.map((ingredient) => <Ingredient key={ingredient.name} amount={ingredient.amount} unit={ingredient.unit} name={ingredient.name} /> );
+    //var ingredients = this.state.recipe.ingredients.map((ingredient) => <Ingredient key={ingredient.name} amount={ingredient.amount} unit={ingredient.unit} name={ingredient.name} /> );
+    var groups = this.state.recipe.ingredients.map((group) => <IngredientGroup key={group.title} title={group.title} ingredients={group.ingredients} />);
     var image = this.state.recipe.image && <Image src={"images/thumbs/" + this.state.recipe.image} thumbnail />;
     var link = this.state.recipe.url && <a href={this.state.recipe.url}>Originalrecept</a>;
     var edit = this.props.token && <Label bsStyle="info" onClick={this.props.click.bind(this)}>Edit recipe</Label>;
@@ -65,7 +66,7 @@ class Recipe extends Component {
         {edit}
         {image}
         <h4>Ingredienser</h4>
-        <ul>{ingredients}</ul>
+        {groups}
         <h4>Beskrivning</h4>
         <Markdown>{this.state.recipe.description}</Markdown>
         {link}
